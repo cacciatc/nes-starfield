@@ -1,0 +1,3 @@
+constrain(0xFFFF) {
+
+}
