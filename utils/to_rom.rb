@@ -1,12 +1,12 @@
 
 obj = File.binread('bin/starfield.o')
 
-words   = obj.unpack("S*")
+words   = obj.unpack("C*")
 state   = :SEEKING_START_LO
 segment = {}
 out     = []
-words[1..-1].each_with_index do |word, i|
-    if not segment[:end].nil? and i > segment[:end] - segment[:start]
+words[2..-1].each_with_index do |word, i|
+    if state == :CODE and i > (segment[:end] - segment[:start])
         state = :SEEKING_START_LO
     end
 
@@ -23,9 +23,8 @@ words[1..-1].each_with_index do |word, i|
         when :SEEKING_END_HI
             segment[:end_hi] = word
             state = :CODE
-            segment[:start] = segment[:start_lo] + (segment[:start_hi] * 256) 
-            segment[:end]   = segment[:end_lo] + (segment[:end_hi] * 256)
-
+            segment[:start] = segment[:start_hi]*256 + segment[:start_lo]
+            segment[:end]   = segment[:end_hi]*256 + segment[:end_lo]
             (segment[:start]..segment[:end]).each do
                 out << 0x00
             end
