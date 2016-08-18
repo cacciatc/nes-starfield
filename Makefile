@@ -1,10 +1,11 @@
 ASM_FLAGS = -c
 ASM       = macross $(ASM_FLAGS)
-LNK_FLAGS = -o bin/starfield.nes
+LNK_FLAGS = -o bin/starfield.o
 LNK       = slinky $(LNK_FLAGS)
 
 debug: src/main.o src/ines.o src/vectors.o
 	$(LNK) src/ines.o src/main.o src/vectors.o
+	ruby utils/to_rom.rb
 
 src/main.o: src/main.m
 	$(ASM) $< -o $@
@@ -18,3 +19,4 @@ src/vectors.o: src/vectors.m
 .PHONY clean:
 	rm src/*.o
 	rm bin/starfield.nes
+	rm bin/starfield.o
