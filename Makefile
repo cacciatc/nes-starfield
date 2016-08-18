@@ -3,9 +3,13 @@ ASM       = macross $(ASM_FLAGS)
 LNK_FLAGS = -o bin/starfield.o
 LNK       = slinky $(LNK_FLAGS)
 
-debug: src/main.o src/ines.o src/vectors.o
-	$(LNK) src/ines.o src/main.o src/vectors.o
+debug: bin/starfield.nes
+
+bin/starfield.nes: bin/starfield.o
 	ruby utils/to_rom.rb
+
+bin/starfield.o: src/main.o src/ines.o src/vectors.o
+	$(LNK) src/ines.o src/main.o src/vectors.o
 
 src/main.o: src/main.m
 	$(ASM) $< -o $@
