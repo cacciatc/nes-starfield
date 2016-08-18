@@ -1,3 +1,0 @@
-constrain(0xFFFF) {
-
-}
